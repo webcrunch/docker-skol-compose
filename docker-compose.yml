@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  service1:
+    build:
+      context: ./service1
+      dockerfile: Dockerfile
+    networks:
+      - app-tier
+    # ports:
+    #   - "5001:5001"
+  service2:
+    build:
+      context: ./service2
+      dockerfile: Dockerfile
+    networks:
+      - app-tier
+    ports:
+      - "5002:5002"
+
+  promethius:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - app-tier
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      # - ./storage/:/app/storage
+
+  # db:
+  #   image: mysql:8.0
+  #   restart: always
+  #   container_name: mysql-string
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: supersecret
+  #     MYSQL_DATABASE: test
+  #     MYSQL_USER: stina
+  #     MYSQL_PASSWORD: monster
+  #     # - MYSQL_DATABASE=auctionista
+  #     # - MYSQL_ROOT_PASSWORD=mauFJcuf5dhRMQrjj
+  #   networks:
+  #     - app-tier
+  #   ports:
+  #     - '3303:3306'
+  #   volumes:
+  #     - ./mysql-data:/var/lib/mysql
+  #     # - .mysql/mysql
+  #     # - ./initdb/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  app-tier:
+    driver: bridge
