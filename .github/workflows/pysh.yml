@@ -25,10 +25,10 @@ jobs:
         run: |
           echo "current_version=$(grep '# version' version.md | cut -d ' ' -f3)" >> $GITHUB_ENV
           echo "Current version: ${{ env.current_version }}"
-      - name: Generate Modified Deployment YAML
+      - name: Generate Modified Deployment yml
         run: |
-          sed -e "s/microservice1/microservice1:${{ env.current_version }}/g" deployment-service1.yaml > modified-deployment-service1.yaml
-          sed -e "s/microservice1/microservice2:${{ env.current_version }}/g" deployment-service2.yaml > modified-deployment-service2.yaml
+          sed -e "s/microservice1/microservice1:${{ env.current_version }}/g" deployment-service1.yml > modified-deployment-service1.yml
+          sed -e "s/microservice2/microservice2:${{ env.current_version }}/g" deployment-service2.yml > modified-deployment-service2.yml
       - name: Build microservice1 image
         run: |
           eval $(minikube -p minikube docker-env)
@@ -44,10 +44,10 @@ jobs:
       - name: Deploy to minikube
         run: |
           eval $(minikube -p minikube docker-env)
-          kubectl apply -f modified-deployment-service1.yaml
-          kubectl apply -f modified-deployment-service2.yaml
-          kubectl apply -f service-service1.yaml
-          kubectl apply -f service-service2.yaml
+          kubectl apply -f modified-deployment-service1.yml
+          kubectl apply -f modified-deployment-service2.yml
+          kubectl apply -f service-service1.yml
+          kubectl apply -f service-service2.yml
       - name: List deployments
         run: kubectl get deploy
       - name: List services
